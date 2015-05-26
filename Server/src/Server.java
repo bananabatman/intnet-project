@@ -24,7 +24,7 @@ public class Server {
 	
 	final String cname = "cname";
 	final String uname = "uname";
-	final String pword = "pword";
+	final String pword = "password";
 	final String info = "info";
 	final String type = "type";
 	final String cid = "cid";
