@@ -22,18 +22,20 @@ var validate = function() {
 	Cookies.set("password",password);
 
 	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("POST", "login.html", true);
-
-	
+	xmlhttp.open("GET", "login.html", true);
+	//window.location.reload();
+	window.location.href="startview.html";
 	var uname = Cookies.get("uname");
 	var pwrd = Cookies.get("password");
 	console.log("u "+uname);	
 	console.log("p "+pwrd);
-	//window.location.href="startview.html";
-	/*if(username and password does not match in databse)
-		//alert("mjau");
-		return false;
-	*/
+
+	if(username==uname && password==pwrd) {
+		window.location.href="startview.html";
+	} else {
+		alert("User "+uname+" does not exist");
+	}
+
 }
 
 var newUser = function() {

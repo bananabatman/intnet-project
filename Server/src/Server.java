@@ -232,19 +232,23 @@ public class Server {
 			// Check the database
 			try {
 				SQLiteStatement st = null;
-				st = db.prepare("SELECT uname FROM users WHERE uname = ? AND pword = ?");
+				st = db.prepare("SELECT username FROM users WHERE username = ? AND password = ?");
 				st.bind(1, uname);
 				st.bind(2, pword);
+				System.out.println("MJAU");
 				if (st.step()) {
 					// A row was found, successful login.
 					List<String> values = new ArrayList<String>();
 					values.add("uname="+uname);
+					System.out.println(uname);
 					header.put("Set-Cookie", values);
+					System.out.println("OK");
 				}
 				closeDatabase(db);
 				return 0;
 			} catch (Exception e) {
 				System.err.println("Failed to read the database");
+				e.printStackTrace();
 				closeDatabase(db);
 				return -1;
 			}
@@ -431,7 +435,7 @@ public class Server {
 
 			try {
 				// TODO: Check username, can duplets be?
-				st = db.prepare("INSERT INTO users (cname, pword) VALUES (?, ?)");
+				st = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)");
 				st.bind(1, uname);
 				st.bind(2, pword);
 				st.stepThrough();
@@ -441,6 +445,7 @@ public class Server {
 				return 0;
 
 			} catch (Exception e) {
+				e.printStackTrace();
 				System.err.println("Could not insert to database");
 				closeDatabase(db);
 				return -1;
