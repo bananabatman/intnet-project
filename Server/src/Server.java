@@ -280,6 +280,7 @@ public class Server {
 				SQLiteStatement st = null;
 				st = db.prepare("SELECT cid, cname FROM company ORDER BY cname");
 				while (st.step()) {
+					System.out.println(st.columnString(1));
 					// First company will not have the comma, the rest will, but not the last. Perfect.
 					sb.append(prefix);
 					prefix = ",";
@@ -288,7 +289,9 @@ public class Server {
 					sb.append(st.columnString(1));
 				}
 				values.add("listcomp="+sb.toString());
+				System.out.println(values.get(0));
 				header.put("Set-Cookie", values);
+				System.out.println(header.toString());
 				closeDatabase(db);
 				return 0;
 			} catch (Exception e) {
@@ -440,7 +443,7 @@ public class Server {
 				st.bind(2, pword);
 				st.stepThrough();
 				values.add(this.uname+"="+uname);
-				header.put("Set-Cookie", values);
+				//header.put("Set-Cookie", values);
 				closeDatabase(db);
 				return 0;
 

@@ -23,6 +23,7 @@ var validate = function() {
 
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("GET", "login.html", true);
+	xmlhttp.send();
 	//window.location.reload();
 	window.location.href="startview.html";
 	var uname = Cookies.get("uname");
@@ -59,7 +60,14 @@ var newUser = function() {
 }
 
 function request() {
-	Cookies.set("server", "listComp");
+	Cookies.set("listcomp", "");
+	Cookies.set("server", "listcomp");
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", "startview.html", true);
+	xmlhttp.send()
+	console.log("request");
+
+	populateTable();
 }
 
 function setCurrentUser() {
@@ -116,13 +124,15 @@ var populateTable = function () {
 	//click on tablerow leads to company view 
 	//where cid determines page content
 	//database should sort the content desc
-	
-	Cookies.get("listcomp");
+	//request();
+	var companies = Cookies.get("listcomp"); 	//.split(",");
+	console.log(companies);
 	var table = document.getElementById("table");
-	var serverData = ["Digpro", "WSP", "ÅF", "Metrolit"];
+	//var serverData = ["Digpro", "WSP", "ÅF", "Metrolit"];
 	document.getElementById("skyline").style.display = "none";
-	for(i=0; i<serverData.length; i++) {
-		table.insertRow(i).insertCell(0).innerHTML="<p onclick='loadCompPage(this)'>"+serverData[i]+"</p>";
+	for(i=0; i<companies.length; i++) {
+		var cname=companies.split(":")[0];
+		table.insertRow(i).insertCell(0).innerHTML="<p onclick='loadCompPage(this)'>"+cname+"</p>";
 	}
 
 	return false;
