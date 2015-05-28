@@ -6,17 +6,30 @@
 //Laddar Startskärm
 
 var getServerData = function () {
-	var serverdata = [];
+	//tar in array med server valuet samt resterande data som ska 
+	//Skickas med requesten
+	
 }
 
 var validate = function() {
 	//Verifies user information
 	//checks with database
+	var requestParameters = [];
 	var username = document.getElementById("username").value;
 	var password = document.getElementById("pwrd").value;
 	Cookies.set("server", "login");
+	Cookies.set("uname",username);
+	Cookies.set("password",password);
+
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("POST", "login.html", true);
+
+	
 	var uname = Cookies.get("uname");
 	var pwrd = Cookies.get("password");
+	console.log("u "+uname);	
+	console.log("p "+pwrd);
+	//window.location.href="startview.html";
 	/*if(username and password does not match in databse)
 		//alert("mjau");
 		return false;
@@ -31,13 +44,15 @@ var newUser = function() {
 	console.log(username);
 	if(username=="" || username=="Username") {
 		alert("You must enter name and password");
+		return false;
 	} else {
 		Cookies.set("server", "newuser");
 		Cookies.set("uname", username);
 		Cookies.set("password", password);
-		
+		window.location.href="startview.html";
 		console.log("get "+Cookies.get("uname"));
 		console.log("after");
+		return true;
 	}
 }
 
