@@ -5,9 +5,19 @@
 //Laddar inloggningssida
 //Laddar Startskärm
 
-var getServerData = function () {
-	//tar in array med server valuet samt resterande data som ska 
-	//Skickas med requesten
+function request(servervalue) {	//
+	
+	Cookies.set("server", servervalue);
+	var xmlhttp = new XMLHttpRequest();
+	if(servervalue=="listcomp" || servervalue=="bookmark") {
+		xmlhttp.open("GET", "startview.html", true);
+		xmlhttp.send()
+	} else if(servervalue=="viewcomp") {
+		xmlhttp.open("GET", "companyview.html", true);
+		xmlhttp.send()
+	}
+	console.log("request " + servervalue);
+
 	
 }
 
@@ -24,18 +34,15 @@ var validate = function() {
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("GET", "login.html", true);
 	xmlhttp.send();
-	//window.location.reload();
-	window.location.href="startview.html";
-	var uname = Cookies.get("uname");
-	var pwrd = Cookies.get("password");
-	console.log("u "+uname);	
-	console.log("p "+pwrd);
+	request()
 
-	if(username==uname && password==pwrd) {
+	window.location.href="startview.html";
+	
+	/*if(username==uname && password==pwrd) {
 		window.location.href="startview.html";
 	} else {
 		alert("User "+uname+" does not exist");
-	}
+	}*/
 
 }
 
@@ -59,16 +66,7 @@ var newUser = function() {
 	}
 }
 
-function request() {
-	Cookies.set("listcomp", "");
-	Cookies.set("server", "listcomp");
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", "startview.html", true);
-	xmlhttp.send()
-	console.log("request");
 
-	populateTable();
-}
 
 function setCurrentUser() {
 	//sets current user in statusfield
@@ -85,24 +83,29 @@ var loadCompPage = function (companyname) {
 	//when company in list or searchresult tapped
 	//gets company info  and inserts it into page companyview.html
 	//then loads that page
-	//Cookies.set("server", "viewcomp");
-	//Cookies.set("cname", companyName.innerHTML);
-	console.log("compname "+ companyname.innerHTML);
+	var cname = companyname.innerHTML;
+	console.log("compname "+ cname);
+	Cookies.set("cname", cname);
+	Cookies.set("info", "buba")
+	request("viewcomp");
 	window.location.href="companyview.html";
+	loadCompInfo(cname);
 	console.log("COMPANY JAO");
 }
 
-var loadCompInfo = function () {
-	document.getElementById("compName").innerHTML=Cookies.get("cname");
+var loadCompInfo = function (companyname) {
+	document.getElementById("compName").innerHTML=Cookies.get("cname") + Cookies.get("info");
+	console.log("compinfo");
 }
 
 var getFavorites = function () {
-	//might be redundant, could use 
-	//Populate table instead
-	//get list of favs from server
-	Cookies.set("")
-	//populateTable(fav);
+	request("bookmark");
+	populateTable();
+}
 
+var getCompanies = function () {
+	request("listcomp");
+	populateTable();
 }
 
 var getSearchResult = function () {
@@ -111,28 +114,22 @@ var getSearchResult = function () {
 	//and puts result in a table
 	//populateTable(search);
 }
+
 function clickHandler()
 {
     alert(this.textContent);
 }
-var populateTable = function () {
-	//takes flag OR array of data as input
-	//flag determines whether to update
-	//Searchresult, bookmarks, company list
-	//OR it simply updates with the input
 
-	//click on tablerow leads to company view 
-	//where cid determines page content
-	//database should sort the content desc
-	//request();
+var populateTable = function () {
+
 	var companies = Cookies.get("listcomp"); 	//.split(",");
 	console.log(companies);
 	var table = document.getElementById("table");
-	//var serverData = ["Digpro", "WSP", "ÅF", "Metrolit"];
+	var serverData = ["Digpro", "WSP", "ÅF", "Metrolit"];
 	document.getElementById("skyline").style.display = "none";
-	for(i=0; i<companies.length; i++) {
+	for(i=0; i<serverData.length; i++) {
 		var cname=companies.split(":")[0];
-		table.insertRow(i).insertCell(0).innerHTML="<p onclick='loadCompPage(this)'>"+cname+"</p>";
+		table.insertRow(i).insertCell(0).innerHTML="<p onclick='loadCompPage(this)'>"+serverData[i]+"</p>";
 	}
 
 	return false;
@@ -149,10 +146,11 @@ var setFavorite = function () {
 	if(favIcon.src.search("fav.png") != -1) {
 		favIcon.src="css/images/favok.png";
 		console.log("not fav.png")
-
+		alert(Cookies.get("cname")+" added to favorites!");
 		//add favorite
 	} else {
 		//remove favorite
+		alert(Cookies.get("cname")+" removed from favorites!");
 			favIcon.src="css/images/fav.png";
 	}
 	

@@ -159,8 +159,13 @@ html{
 	text-align: center;
 
 }
-p{
+.text{
 	margin:2%;
+	font-size:80px;
+	color:white;
+	padding-left:15px;
+	font-family: Arial;
+	text-align: center;
 }
 
 #favCompView {
